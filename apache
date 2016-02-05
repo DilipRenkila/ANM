@@ -1,0 +1,8 @@
+Alias /anm "/home/dilip/et2536-dire15/"
+
+<Directory "/home/dilip/et2536-dire15/">
+        Options Indexes FollowSymLinks
+        Require all granted
+
+</Directory>
+

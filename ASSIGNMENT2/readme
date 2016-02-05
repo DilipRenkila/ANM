@@ -1,0 +1,8 @@
+######################################
+
+1.    Inorder to build all dependencies run install.sh
+2.    To run backend you have to add crontab for that script
+3.    Inorder to add crontab run the following command
+      =>  crontab -e
+          */5 * * * * /home/dilip/et2536-dire15/ASSIGNMENT2/backend1.pl
+          */5 * * * * /home/dilip/et2536-dire15/ASSIGNMENT2/backend2.pl

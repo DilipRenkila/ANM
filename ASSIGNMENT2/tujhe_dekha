@@ -1,0 +1,260 @@
+if(empty($id) && !empty($ID))
+{ 
+       $Query = "SELECT * FROM LIST WHERE id=$ID ";
+       $Query_run = mysql_query($Query,$conn);
+       
+       while ($Row=mysql_fetch_array($Query_run,MYSQL_ASSOC)) 
+          {
+			 $ip=$Row['IP'];       
+                       create_graphs("$ip(day).png", "-1d", "Daily Webserver Statistics for $ip","$ip.rrd"); 
+
+                       echo "<table>";
+                       echo "<tr><td>";
+                       echo "<img src='$ip(day).png' alt='Generated RRD image'>";
+                       echo "</td></tr>";
+                       echo "</table>";
+           }
+
+		  
+}
+function create_graphs($output,$start,$title,$rrd)
+       {
+           $options = array(
+                              "--slope-mode",
+                              '--end',"now",
+	                      '--start',"now-84600",'--alt-y-grid','--alt-autoscale','--rigid',
+                              "--title=$title",
+                            #  "--vertical-label=bytes/sec",
+                              "--lower=0",
+			      "--units=si",
+                              "--force-rules-legend",
+                              "DEF:c=$rrd:cpu_usage:AVERAGE",
+                              "DEF:r=$rrd:reqpersec:AVERAGE",
+				"DEF:b=$rrd:bytespersec:AVERAGE",
+				"DEF:q=$rrd:bytesperreq:AVERAGE",
+                              "LINE1:c#0000FF:CPU Usage of webserver\l", 
+                              "LINE2:r#FF0000:Requests per second of webserver\l",
+				"LINE3:b#F0000F:Bytes per second of webserver\l",
+				"LINE4:q#F000F0:Bytes per Request of webserver\l",
+                              "GPRINT:c:AVERAGE:CPU Usage AVG %6.2lf \l",
+                              "GPRINT:c:MAX:CPU Usage MAX %6.2lf \l",
+                              "GPRINT:c:LAST:CPU Usage LAST %6.2lf \l",
+                              "GPRINT:r:AVERAGE:Requests per second AVG %6.2lf \l",
+                              "GPRINT:r:MAX:Requests per second MAX %6.2lf \l",
+                              "GPRINT:r:LAST:Requests per second LAST %6.2lf \l",
+                              "GPRINT:b:AVERAGE:Bytes per Second AVG %6.2lf %SBps\l",
+                              "GPRINT:b:MAX:Bytes per Second MAX %6.2lf %SBps\l",
+                              "GPRINT:b:LAST:Bytes per Second LAST %6.2lf %SBps\l",
+                              "GPRINT:q:AVERAGE:Bytes per Request AVG %6.2lf \l",
+                              "GPRINT:q:MAX:Bytes per Request MAX %6.2lf \l",
+                              "GPRINT:q:LAST:Bytes per Request LAST %6.2lf \l"
+                                                        );
+
+           $ret = rrd_graph($output, $options);
+           if (! $ret) 
+                         {
+                              echo "<b>Graph error: </b>".rrd_error()."\n";
+                         }
+     
+       }
+
+
+if(!empty($id) && !empty($ID))
+{ 
+       $Query = "SELECT * FROM LIST WHERE id=$id ";
+       $Query_run = mysql_query($Query,$conn);
+       $Query1 = "SELECT * FROM LIST WHERE id=$ID ";
+       $Query_run1 = mysql_query($Query1,$conn);       
+       while (($Row=mysql_fetch_array($Query_run,MYSQL_ASSOC)) && ($row=mysql_fetch_array($Query_run1,MYSQL_ASSOC))) 
+          {                      
+			         $q=$Row['Wanted'];
+                    		 $IP=$Row['IP'];
+                                 $ip=$row['IP'];
+			         $d = explode(",",$q);
+			         foreach ($d as $n)
+			         {
+                                     $o="o"."$n";
+                                     $i="i"."$n";
+				     
+                       create_graphS("$id-$ip (day).png", "-1d", "Interface $n of $IP and for webserver $ip","$id.rrd","$ip.rrd",$i,$o); 
+
+                       echo "<table>";
+                       echo "<tr><td>";
+                       echo "<img src='$id-$ip (day).png' alt='Generated RRD image'>";
+                       echo "</td></tr>";
+                       echo "</table>";
+                       }
+
+		  }
+}
+function create_graphS($output,$start,$title,$rrd1,$rrd2,$i,$o)
+       {
+           $options = array(
+                              "--slope-mode",
+                              '--end',"now",
+	                      '--start',"now-84600",'--alt-y-grid','--alt-autoscale','--rigid',
+                              "--title=$title",
+ #                             "--vertical-label=bytes/sec",
+                              "--lower=0",
+			      "--units=si",
+                              "--force-rules-legend",
+                              "DEF:i=$rrd1:$i:AVERAGE",
+                              "DEF:o=$rrd1:$o:AVERAGE",
+                              "DEF:c=$rrd2:cpu_usage:AVERAGE",
+                              "DEF:r=$rrd2:reqpersec:AVERAGE",
+			      "DEF:b=$rrd2:bytespersec:AVERAGE",
+			      "DEF:q=$rrd2:bytesperreq:AVERAGE",
+                              "AREA:i#0000FF:IN bytes per sec\l", 
+                              "LINE2:o#FF0000:OUT bytes per sec\l",
+                              "LINE3:c#0000FF:Cpu Usage of webserver\l", 
+                              "LINE4:r#FF0000:Requests per second of webserver\l",
+			      "LINE5:b#F0000F:Bytes per second of webserver\l",
+			      "LINE6:q#F000F0:Bytes per Request of webserver\l",
+                              "GPRINT:i:AVERAGE:IN  AVG %6.2lf %SBps\l",
+                              "GPRINT:o:AVERAGE:OUT AVG %6.2lf %SBps\l",
+                              "GPRINT:i:MAX:IN  MAX %6.2lf %SBps\l",
+                              "GPRINT:o:MAX:OUT MAX %6.2lf %SBps\l",
+                              "GPRINT:i:LAST:IN  LAST %6.2lf %SBps\l",
+                              "GPRINT:o:LAST:OUT LAST %6.2lf %SBps\l",
+                              "GPRINT:c:AVERAGE:Cpu Usage AVG %6.2lf \l",
+                              "GPRINT:c:MAX:Cpu Usage MAX %6.2lf \l",
+                              "GPRINT:c:LAST:Cpu Usage LAST %6.2lf \l",
+                              "GPRINT:r:AVERAGE:Requests per second AVG %6.2lf \l",
+                              "GPRINT:r:MAX:Requests per second MAX %6.2lf \l",
+                              "GPRINT:r:LAST:Requests per second LAST %6.2lf \l",
+                              "GPRINT:b:AVERAGE:Bytes per Second AVG %6.2lf %SBps\l",
+                              "GPRINT:b:MAX:Bytes per Second MAX %6.2lf %SBps\l",
+                              "GPRINT:b:LAST:Bytes per Second LAST %6.2lf %SBps\l",
+                              "GPRINT:q:AVERAGE:Bytes per Request AVG %6.2lf \l",
+                              "GPRINT:q:MAX:Bytes per Request MAX %6.2lf \l",
+                              "GPRINT:q:LAST:Bytes per Request LAST %6.2lf \l"
+                                                        );
+
+           $ret = rrd_graph($output, $options);
+           if (! $ret) 
+                         {
+                              echo "<b>Graph error: </b>".rrd_error()."\n";
+                         }
+     
+       }
+
+
+if(isset($webserver))
+{ 
+       $Query = "SELECT * FROM LIST WHERE id=$ID ";
+       $Query_run = mysql_query($Query,$conn);
+       
+       while ($Row=mysql_fetch_array($Query_run,MYSQL_ASSOC)) 
+          {
+			 $ip=$Row['IP'];       
+                       create_graphs("$ip(day).png", "-1d", "Daily Webserver Statistics for $ip","$ip.rrd"); 
+
+                       echo "<table>";
+                       echo "<tr><td>";
+                       echo "<img src='$ip(day).png' alt='Generated RRD image'>";
+                       echo "</td></tr>";
+                       echo "</table>";
+           }
+
+		  
+}
+function create_graphs($output,$start,$title,$rrd)
+       {
+           $options = array(
+                              "--slope-mode",
+                              '--end',"now",
+	                      '--start',"now-84600",'--alt-y-grid','--alt-autoscale','--rigid',
+                              "--title=$title",
+                            #  "--vertical-label=bytes/sec",
+                              "--lower=0",
+			      "--units=si",
+                              "--force-rules-legend",
+                              "DEF:c=$rrd:cpu_usage:AVERAGE",
+                              "DEF:r=$rrd:reqpersec:AVERAGE",
+				"DEF:b=$rrd:bytespersec:AVERAGE",
+				"DEF:q=$rrd:bytesperreq:AVERAGE",
+                              "LINE1:c#0000FF:CPU Usage of webserver\l", 
+                              "LINE2:r#FF0000:Requests per second of webserver\l",
+				"LINE3:b#F0000F:Bytes per second of webserver\l",
+				"LINE4:q#F000F0:Bytes per Request of webserver\l",
+                              "GPRINT:c:AVERAGE:CPU Usage AVG %6.2lf \l",
+                              "GPRINT:c:MAX:CPU Usage MAX %6.2lf \l",
+                              "GPRINT:c:LAST:CPU Usage LAST %6.2lf \l",
+                              "GPRINT:r:AVERAGE:Requests per second AVG %6.2lf \l",
+                              "GPRINT:r:MAX:Requests per second MAX %6.2lf \l",
+                              "GPRINT:r:LAST:Requests per second LAST %6.2lf \l",
+                              "GPRINT:b:AVERAGE:Bytes per Second AVG %6.2lf %SBps\l",
+                              "GPRINT:b:MAX:Bytes per Second MAX %6.2lf %SBps\l",
+                              "GPRINT:b:LAST:Bytes per Second LAST %6.2lf %SBps\l",
+                              "GPRINT:q:AVERAGE:Bytes per Request AVG %6.2lf \l",
+                              "GPRINT:q:MAX:Bytes per Request MAX %6.2lf \l",
+                              "GPRINT:q:LAST:Bytes per Request LAST %6.2lf \l"
+                                                        );
+
+           $ret = rrd_graph($output, $options);
+           if (! $ret) 
+                         {
+                              echo "<b>Graph error: </b>".rrd_error()."\n";
+                         }
+     
+       }
+
+if(isset($graph))
+{ 
+       $Query = "SELECT * FROM LIST WHERE id=$id ";
+       $Query_run = mysql_query($Query,$conn);
+       
+       while ($Row=mysql_fetch_array($Query_run,MYSQL_ASSOC)) 
+          {
+			         $q=$Row['Wanted'];
+			         $d = explode(",",$q);
+			         foreach ($d as $n)
+			         {
+
+                       $o="o"."$n";
+                       $i="i"."$n";
+
+                       create_graph("$id-$n (day).png", "-1d", "Daily Traffic Analysis for Interface $n","$id.rrd",$i,$o); 
+
+                       echo "<table>";
+                       echo "<tr><td>";
+                       echo "<img src='$id-$n (day).png' alt='Generated RRD image'>";
+                       echo "</td></tr>";
+                       echo "</table>";
+                       }
+
+		  }
+}
+function create_graph($output,$start,$title,$rrd,$i,$o)
+       {
+           $options = array(
+                              "--slope-mode",
+                              '--end',"now",
+	                      '--start',"now-84600",'--alt-y-grid','--alt-autoscale','--rigid',
+                              "--title=$title",
+                              "--vertical-label=bytes/sec",
+                              "--lower=0",
+			      "--units=si",
+                              "--force-rules-legend",
+                              "DEF:i=$rrd:$i:AVERAGE",
+                              "DEF:o=$rrd:$o:AVERAGE",
+                              "AREA:i#0000FF:IN bytes per sec", 
+                              "LINE2:o#FF0000:OUT bytes per sec\l",
+                              "GPRINT:i:AVERAGE:IN  AVG %6.2lf %SBps\l",
+                              "GPRINT:o:AVERAGE:OUT AVG %6.2lf %SBps\l",
+                              "GPRINT:i:MAX:IN  MAX %6.2lf %SBps\l",
+                              "GPRINT:o:MAX:OUT MAX %6.2lf %SBps\l",
+                              "GPRINT:i:LAST:IN  LAST %6.2lf %SBps\l",
+                              "GPRINT:o:LAST:OUT LAST %6.2lf %SBps\l"
+                                                        );
+
+           $ret = rrd_graph($output, $options);
+           if (! $ret) 
+                         {
+                              echo "<b>Graph error: </b>".rrd_error()."\n";
+                         }
+     
+       }
+
+
+
