@@ -26,7 +26,7 @@ perl -MCPAN -e 'install RRD::Editor'
 ```
 ##Getting Started
 
-Before proceeding to installation, please change the login credentials in "db.conf" file.
+Before proceeding to installation, please change the login credentials in ````db.conf```` file.
 
 ```perl
 $hostname="<your_ip>";
