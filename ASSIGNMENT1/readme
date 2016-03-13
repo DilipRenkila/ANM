@@ -1,30 +1,20 @@
-###############################################
-
-1.Inorder to build all dependencies run install.sh
-2.To run backend  run install.sh
 
 
-###############################################
+- Inorder to build all dependencies run `install.sh`
+- To run backend  run ````install.sh````
 
-1. Insert the following lines in apache2.conf
+- Insert the following lines in apache2.conf
 
-Alias /anm "/home/rahul/et2536-dire15/"
-<Directory "/home/rahul/et2536-dire15/">
+````Alias /ANM "<path_of_this_directory>"
+<Directory "<path_of_this_directory>">
        Options Indexes FollowSymLinks
         AllowOverride None
         Require all granted
-</Directory>
+</Directory>````
 
 
 
 
-2. Insert the following lines in apache2.conf
 
-Alias /mrtg "/home/rahul/et2536-dire15/ASSIGNMENT1/mrtg"
-<Directory "/home/rahul/et2536-dire15/ASSIGNMENT1/mrtg">
-       Options Indexes FollowSymLinks
-        AllowOverride None
-        Require all granted
-</Directory>
  
 
