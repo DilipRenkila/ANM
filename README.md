@@ -16,7 +16,30 @@ The basic functions of this tool is to
 The packages required can be installed by the following.
 
 ```sh
-$ sudo apt-get -y install apache2 mysql-server php5 php5-mysql libgd-graph-perl libapache2-mod-php5 cpanminus openssh-server
-$ sudo cpan install DBI
-$ sudo cpan install Net::OpenSSH
+sudo apt-get install snmp snmpd mysql-server rrdtool mrtg librrds-perl apache2 php5 libapache2-mod-php5 php5-rrd php5-mysql
+sudo /etc/init.d/apache2 restart
+perl -MCPAN -e 'install LWP::Simple'
+perl -MCPAN -e 'install Net::SNMP'
+perl -MCPAN -e 'install Net::SNMP::Interfaces'
+perl -MCPAN -e 'install RRD::Simple'
+perl -MCPAN -e 'install RRD::Editor'
+```
+##Getting Started
+
+Before proceeding to installation, please change the login credentials in "db.conf" file.
+
+```perl
+$hostname="<your_ip>";
+$port="<port_mysql>";
+$database="<mysql_database_name>";
+$username="<mysql_username>";
+$password="<mysql_password>";
+```
+
+##Installation
+
+To automatically install the tool along with all the pre-requisites, Just run the ````install.sh```` script using the following command from your tool directory
+
+```sh
+./install.sh
 ```
