@@ -1,11 +1,11 @@
 # ANM
 An Advanced Network Management Tool for managing your complex Networks. This is based up on Simple Network Management Protocol.
 
-It is divided into four parts.
+The basic functions of this tool is to:
 
-- visualizes bitrate of the devices being monitored graphically through a dashboard. 
+- visualize bitrate of the devices being monitored graphically through a dashboard. 
 
-- correlates the performance of network devices and webservers visually. 
+- correlate the performance of your network devices and webservers visually. 
 
  
 
