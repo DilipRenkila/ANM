@@ -43,3 +43,9 @@ To automatically install the tool along with all the pre-requisites, Just run th
 ```sh
 ./install.sh
 ```
+To just Run the backend ("Pre-requisites need to be already installed") use "run.sh" by using the following command from your tool directory
+```sh
+./run.sh
+```
+To open the dashboard, just open the following [link](`https://localhost/ANM).
+````https://<your_ip>/ANM ````
