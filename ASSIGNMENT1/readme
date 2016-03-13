@@ -2,7 +2,6 @@
 
 - Inorder to build all dependencies run `install.sh`
 - To run backend  run ````install.sh````
-
 - Insert the following lines in apache2.conf
 
 ````Alias /ANM "<path_of_this_directory>"
