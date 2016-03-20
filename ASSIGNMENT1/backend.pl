@@ -5,15 +5,10 @@ use RRD::Simple;
 use FindBin;
 use Data::Dumper;
 use Net::SNMP::Interfaces;
-
-# Finding the path of db.conf
+# finding te path of db.conf
       my $step =300;my @IF;my $size = 40;
-
-      
-
       $pwd=$FindBin::Bin;@split=split("/",$pwd);pop(@split);push(@split,"db.conf");$realpath=join("/",@split);
       do "$realpath";
-
       my $dbh = DBI->connect("DBI:mysql:database=$database;host=$host;port=$port",$username , $password);
       $query = $dbh->prepare("SELECT * FROM DEVICES");
       $query->execute() or die $DBI::errstr;
@@ -21,8 +16,7 @@ use Net::SNMP::Interfaces;
       $query1->execute() or die $DBI::errstr;
 
       $create=$dbh->prepare("CREATE TABLE IF NOT EXISTS INFO1 (id int(11) NOT NULL,ifnumbers tinytext NOT NULL,name tinytext NOT NULL
-                                                                                                                                                                                              
-                                                     ) ENGINE=InnoDB DEFAULT CHARSET=latin1  " );
+                                                                                                                                                                                                                                                   ) ENGINE=InnoDB DEFAULT CHARSET=latin1  " );
       $create->execute() or die $DBI::errstr;
       
       my %update;
@@ -33,8 +27,6 @@ use Net::SNMP::Interfaces;
       while(my @row=$query->fetchrow_array())
       {
            ($id,$ip,$p,$c)=@row;
-
-            
             my $interfaces = Net::SNMP::Interfaces->new(    Hostname  => $ip,
                                                             Community => $c,
                                                             Port      => $p );
