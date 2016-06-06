@@ -5,6 +5,7 @@ sudo /etc/init.d/apache2 restart
 perl -MCPAN -e 'install LWP::Simple'
 perl -MCPAN -e 'install Net::SNMP'
 perl -MCPAN -e 'install Net::SNMP::Interfaces'
+perl -MCPAN -e 'install Net::SNMPTrapd'
 perl -MCPAN -e 'install RRD::Simple'
 perl -MCPAN -e 'install RRD::Editor'
 sudo sed -i '$ a\Alias /ANM "<path_of_this_directory>"' /etc/apache2/apache2.conf
